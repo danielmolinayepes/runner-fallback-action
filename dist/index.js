@@ -14,10 +14,10 @@ async function checkRunner({ token, owner, repo, primaryRunnerLabels, fallbackRu
     'Authorization': `Bearer ${token}`,
   };
   
-  core.info("url", url);
-  core.info("headers", headers);
+  core.info(`url ${url}`);
+  core.info(`headers ${JSON.stringify(headers)}`);
   const response = await http.getJson(url, headers);
-  core.info("response", response);
+  core.info(`response ${JSON.stringify(response)}`);
   if (response.statusCode !== 200) {
     return { error: `Failed to get runners. Status code: ${response.statusCode}` };
   }
