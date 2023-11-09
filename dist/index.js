@@ -12,7 +12,8 @@ async function checkRunner({ token, owner, repo, primaryRunnerLabels, fallbackRu
   const headers = {
     'Authorization': `Bearer ${token}`,
   };
-  const response = await http.getJson(`https://api.github.com/repos/${owner}/${repo}/actions/runners`, headers);
+  console.log("repor", repo)
+  const response = await http.getJson(`https://api.github.com/org/${owner}/actions/runners`, headers);
 
   if (response.statusCode !== 200) {
     return { error: `Failed to get runners. Status code: ${response.statusCode}` };
