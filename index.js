@@ -3,12 +3,15 @@ const httpClient = require('@actions/http-client');
 
 async function checkRunner({ token, owner, repo, primaryRunnerLabels, fallbackRunner }) {
   const http = new httpClient.HttpClient('http-client');
+  const url = `https://api.github.com/repos/${owner}/${repo}/actions/runners`;
   const headers = {
     'Authorization': `Bearer ${token}`,
   };
-  console.log("repor", repo)
-  const response = await http.getJson(`https://api.github.com/org/${owner}/actions/runners`, headers);
-
+  
+  core.info("url", url);
+  core.info("headers", headers);
+  const response = await http.getJson(url, headers);
+  core.info("response", response);
   if (response.statusCode !== 200) {
     return { error: `Failed to get runners. Status code: ${response.statusCode}` };
   }
