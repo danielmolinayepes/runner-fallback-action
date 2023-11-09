@@ -34,20 +34,21 @@ async function checkRunner({ token, owner, repo, primaryRunnerLabels, fallbackRu
 async function main() {
   const githubRepository = process.env.GITHUB_REPOSITORY;
   const [owner, repo] = githubRepository.split("/");
-
+  const fallbackRunner = core.getInput('fallback-runner', { required: true });
   try {
     const inputs = {
       owner,
       repo,
       token: core.getInput('github-token', { required: true }),
       primaryRunnerLabels: core.getInput('primary-runner', { required: true }).split(','),
-      fallbackRunner: core.getInput('fallback-runner', { required: true }),
+      fallbackRunner
     };
 
     const { useRunner, primaryIsOnline, error } = await checkRunner(inputs);
 
     if (error) {
-      core.setFailed(error);
+      core.info(error);
+      core.setOutput('use-runner', fallbackRunner);
       return;
     }
 
@@ -56,7 +57,8 @@ async function main() {
 
     core.setOutput('use-runner', useRunner);
   } catch (error) {
-    core.setFailed(error.message);
+    core.info(error);
+    core.setOutput('use-runner', fallbackRunner);
   }
 }
 
